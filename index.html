@@ -1,140 +1,209 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>Gửi Đăng Như 💖</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', sans-serif;
-            overflow: hidden;
-        }
+<meta charset="UTF-8">
+<title>Galaxy Love Music</title>
+<style>
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  background:black;
+  overflow:hidden;
+  font-family:Arial, sans-serif;
+}
 
-        .card {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 40px 50px;
-            border-radius: 25px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            animation: float 4s ease-in-out infinite;
-            z-index: 2;
-        }
+/* nút bật nhạc */
+#musicBtn{
+  position:fixed;
+  top:15px;
+  right:15px;
+  z-index:999;
+  background:#ff77cc;
+  border:none;
+  padding:10px 16px;
+  border-radius:20px;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 0 10px #ff77cc;
+}
 
-        h1 {
-            color: #ff4b6e;
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
+.scene{
+  width:100%;
+  height:100%;
+  perspective:1000px;
+}
 
-        h2 {
-            color: #ff6f91;
-            margin-bottom: 20px;
-        }
+.world{
+  position:absolute;
+  width:100%;
+  height:100%;
+  transform-style:preserve-3d;
+}
 
-        p {
-            color: #555;
-            font-size: 18px;
-            line-height: 1.6;
-        }
+/* mỗi lớp */
+.layer{
+  position:absolute;
+  width:100%;
+  height:100%;
+  transform-style:preserve-3d;
+}
 
-        .heart {
-            position: fixed;
-            top: -10px;
-            color: #ff4b6e;
-            font-size: 20px;
-            animation: fall linear infinite;
-        }
+/* chữ */
+.text{
+  position:absolute;
+  color:#ff77cc;
+  font-weight:bold;
+  white-space:nowrap;
+  text-shadow:
+    0 0 6px #ff77cc,
+    0 0 15px #ff55bb,
+    0 0 30px #ff33aa;
+  animation: float linear infinite;
+}
 
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-        }
+/* tim */
+.heart{
+  position:absolute;
+  color:red;
+  text-shadow:0 0 15px red;
+  animation: float linear infinite;
+}
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        .footer {
-            margin-top: 25px;
-            font-size: 14px;
-            color: #888;
-        }
-
-        /* Nút bật nhạc */
-        .music-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #ff4b6e;
-            color: white;
-            border: none;
-            padding: 12px 18px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: 0.3s;
-        }
-
-        .music-btn:hover {
-            transform: scale(1.1);
-        }
-
-    </style>
+@keyframes float{
+  from{
+    transform: translateY(120vh);
+    opacity:0;
+  }
+  20%{opacity:1;}
+  to{
+    transform: translateY(-140vh);
+    opacity:0;
+  }
+}
+</style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>💖 Đăng Như 💖</h1>
-        <h2>Bik nói gì giờ</h2>
-        <p>Chúc mom ngủ ngoan💕 <br></p>
-        <div class="footer">— Gửi bằng cả trái tim —</div>
-    </div>
+<button id="musicBtn">🔊 Bật nhạc</button>
 
-    <!-- Nhạc nền -->
-    <audio id="music" loop>
-        <source src="https://files.catbox.moe/djiasa.mp3" type="audio/mp3">
-    </audio>
+<!-- nhạc nền -->
+<audio id="bgm" loop>
+  <source src="https://files.catbox.moe/djiasa.mp3" type="audio/mpeg">
+</audio>
 
-    <!-- Nút bật/tắt nhạc -->
-    <button class="music-btn" onclick="toggleMusic()">🎵 Bật nhạc</button>
+<div class="scene">
+  <div class="world" id="world"></div>
+</div>
 
-    <script>
-        function createHeart() {
-            const heart = document.createElement("div");
-            heart.className = "heart";
-            heart.innerHTML = "❤";
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-            heart.style.fontSize = (16 + Math.random() * 20) + "px";
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 6000);
-        }
+<script>
+const world = document.getElementById("world");
+const music = document.getElementById("bgm");
+const btn = document.getElementById("musicBtn");
 
-        setInterval(createHeart, 300);
+btn.onclick = ()=>{
+  if(music.paused){
+    music.play();
+    btn.innerText = "🔊 Đang phát";
+  }else{
+    music.pause();
+    btn.innerText = "🔈 Tắt nhạc";
+  }
+};
 
-        // Điều khiển nhạc
-        const music = document.getElementById("music");
-        const btn = document.querySelector(".music-btn");
-        let isPlaying = false;
+const texts = [
+  "Để tao chứng minh cho màiiiii",
+  "Đồ gấu trúc đáng ghét, chúc ngủ ngoan iiii"
+];
 
-        function toggleMusic() {
-            if (!isPlaying) {
-                music.play();
-                btn.innerHTML = "⏸ Tắt nhạc";
-            } else {
-                music.pause();
-                btn.innerHTML = "🎵 Bật nhạc";
-            }
-            isPlaying = !isPlaying;
-        }
-    </script>
+// ====== TẠO NHIỀU LỚP ======
+const LAYERS = 6;
+const layerDistance = 220;
+let layers = [];
+
+for(let i=0;i<LAYERS;i++){
+  const layer = document.createElement("div");
+  layer.className = "layer";
+  layer.style.transform = `translateZ(${-i*layerDistance}px)`;
+  world.appendChild(layer);
+  layers.push(layer);
+}
+
+function rand(min,max){ return Math.random()*(max-min)+min; }
+
+// ====== TẠO CHỮ ======
+function createText(){
+  const el = document.createElement("div");
+  el.className="text";
+  el.innerText = texts[Math.floor(Math.random()*texts.length)];
+
+  el.style.left = rand(0,90)+"vw";
+  el.style.fontSize = rand(14,60)+"px";
+  el.style.animationDuration = rand(10,20)+"s";
+
+  const layer = layers[Math.floor(Math.random()*layers.length)];
+  layer.appendChild(el);
+
+  setTimeout(()=>el.remove(),20000);
+}
+
+// ====== TẠO TIM ======
+function createHeart(){
+  const h = document.createElement("div");
+  h.className="heart";
+  h.innerText="❤";
+
+  h.style.left = rand(0,95)+"vw";
+  h.style.fontSize = rand(18,40)+"px";
+  h.style.animationDuration = rand(8,16)+"s";
+
+  const layer = layers[Math.floor(Math.random()*layers.length)];
+  layer.appendChild(h);
+
+  setTimeout(()=>h.remove(),16000);
+}
+
+setInterval(createText,400);
+setInterval(createHeart,700);
+
+// ====== XOAY GALAXY ======
+let rx=0, ry=0;
+let drag=false, lx=0, ly=0;
+
+document.addEventListener("mousedown",e=>{
+  drag=true; lx=e.clientX; ly=e.clientY;
+});
+document.addEventListener("mouseup",()=>drag=false);
+document.addEventListener("mousemove",e=>{
+  if(!drag) return;
+  const dx=e.clientX-lx;
+  const dy=e.clientY-ly;
+  ry+=dx*0.2;
+  rx-=dy*0.2;
+  world.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`;
+  lx=e.clientX; ly=e.clientY;
+});
+
+// mobile
+document.addEventListener("touchstart",e=>{
+  drag=true;
+  lx=e.touches[0].clientX;
+  ly=e.touches[0].clientY;
+});
+document.addEventListener("touchend",()=>drag=false);
+document.addEventListener("touchmove",e=>{
+  if(!drag) return;
+  const x=e.touches[0].clientX;
+  const y=e.touches[0].clientY;
+  const dx=x-lx;
+  const dy=y-ly;
+  ry+=dx*0.2;
+  rx-=dy*0.2;
+  world.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`;
+  lx=x; ly=y;
+});
+</script>
 
 </body>
 </html>
