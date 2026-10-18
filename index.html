@@ -109,9 +109,41 @@
             background: #781c24;
             clip-path: polygon(0% 15%, 5% 0%, 10% 20%, 15% 5%, 20% 25%, 25% 0%, 30% 20%, 35% 5%, 40% 25%, 45% 0%, 50% 20%, 55% 5%, 60% 25%, 65% 0%, 70% 20%, 75% 5%, 80% 25%, 85% 0%, 90% 20%, 95% 5%, 100% 15%, 100% 100%, 0% 100%);
         }
+
+        /* HIỆU ỨNG 3 ẢNH NGHỆ THUẬT (POLAROID STACK & SHIMMER) */
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .shimmer-effect::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            transform: translateX(-100%);
+            pointer-events: none;
+        }
+        .group:hover .shimmer-effect::after {
+            animation: shimmer 1.2s ease-in-out;
+        }
+        .polaroid-card {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #ffffff;
+            box-shadow: 0 10px 20px rgba(120, 28, 36, 0.08);
+        }
+        .polaroid-card:hover {
+            transform: translateY(-8px) scale(1.03) rotate(0deg) !important;
+            box-shadow: 0 20px 30px rgba(120, 28, 36, 0.2);
+            z-index: 20;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center p-4 sm:p-6 relative">
+
+    <!-- Thẻ Audio chứa nhạc nền từ Catbox -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://files.catbox.moe/djiasa.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- Container trái tim rơi tổng thể -->
     <div id="hearts-container" class="absolute inset-0 pointer-events-none overflow-hidden z-20"></div>
@@ -232,28 +264,37 @@
                     </div>
                 </div>
 
-                <!-- ================= KHOẢNH KHẮC TỐT NGHIỆP (3 ẢNH) ================= -->
+                <!-- ================= KHOẢNH KHẮC TỐT NGHIỆP (HIỆU ỨNG 3 ẢNH NGHỆ THUẬT) ================= -->
                 <div class="mb-8">
-                    <div class="flex items-center justify-center gap-2 mb-4">
+                    <div class="flex items-center justify-center gap-2 mb-6">
                         <div class="w-8 h-px bg-[#d1a3a7]"></div>
                         <h4 class="font-playfair text-lg font-bold bordeaux-text uppercase tracking-wider">Khoảnh Khắc Tốt Nghiệp</h4>
                         <div class="w-8 h-px bg-[#d1a3a7]"></div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2 pb-2 px-2">
                         <!-- Ảnh 1 -->
-                        <div class="group relative overflow-hidden rounded-2xl shadow-md border-2 border-[#d1a3a7]/50 bg-white p-1 transform hover:-translate-y-1 transition-all duration-300">
-                            <img src="https://cdn.phototourl.com/member/2026-10-18-7b027bdd-f81e-4deb-a61d-052d98e6123a.jpg">
+                        <div class="group relative polaroid-card p-3 rounded-2xl border border-[#ebdcd3] transform -rotate-2">
+                            <div class="overflow-hidden rounded-xl relative shimmer-effect">
+                                <img src="https://cdn.phototourl.com/member/2026-10-18-7b027bdd-f81e-4deb-a61d-052d98e6123a.jpg" alt="Ảnh kỷ niệm 1" class="w-full h-44 object-cover rounded-xl filter saturate-[1.05] contrast-[1.02]">
+                            </div>
+                            <p class="font-vibes bordeaux-text text-xl mt-2">Nụ cười rạng rỡ</p>
                         </div>
 
                         <!-- Ảnh 2 -->
-                        <div class="group relative overflow-hidden rounded-2xl shadow-md border-2 border-[#d1a3a7]/50 bg-white p-1 transform hover:-translate-y-1 transition-all duration-300">
-                            <img src="https://cdn.phototourl.com/member/2026-10-18-5f1e1b52-a51e-46da-b7a1-ad04410dc9d7.jpg">
+                        <div class="group relative polaroid-card p-3 rounded-2xl border border-[#ebdcd3] transform rotate-1 sm:-translate-y-2">
+                            <div class="overflow-hidden rounded-xl relative shimmer-effect">
+                                <img src="https://cdn.phototourl.com/member/2026-10-18-5f1e1b52-a51e-46da-b7a1-ad04410dc9d7.jpg" alt="Ảnh kỷ niệm 2" class="w-full h-44 object-cover rounded-xl filter saturate-[1.05] contrast-[1.02]">
+                            </div>
+                            <p class="font-vibes bordeaux-text text-xl mt-2">Cột mốc tự hào</p>
                         </div>
 
                         <!-- Ảnh 3 -->
-                        <div class="group relative overflow-hidden rounded-2xl shadow-md border-2 border-[#d1a3a7]/50 bg-white p-1 transform hover:-translate-y-1 transition-all duration-300">
-                            <img src="https://cdn.phototourl.com/member/2026-10-18-f0e8950e-368c-402e-a39d-f2e79fc1d37e.jpg ">
+                        <div class="group relative polaroid-card p-3 rounded-2xl border border-[#ebdcd3] transform rotate-2">
+                            <div class="overflow-hidden rounded-xl relative shimmer-effect">
+                                <img src="https://cdn.phototourl.com/member/2026-10-18-f0e8950e-368c-402e-a39d-f2e79fc1d37e.jpg" alt="Ảnh kỷ niệm 3" class="w-full h-44 object-cover rounded-xl filter saturate-[1.05] contrast-[1.02]">
+                            </div>
+                            <p class="font-vibes bordeaux-text text-xl mt-2">Hành trình mới</p>
                         </div>
                     </div>
                 </div>
@@ -272,7 +313,7 @@
 
     <!-- JavaScript Xử Lý Hiệu Ứng -->
     <script>
-        // Thiết lập ngày tháng (18/10/2026)
+        // Thiết lập ngày tháng
         window.addEventListener('DOMContentLoaded', () => {
             const now = new Date();
             const day = now.getDate();
@@ -284,7 +325,6 @@
             document.getElementById('display-month').innerText = monthYearStr;
             document.getElementById('full-date-text').innerText = fullDateStr;
 
-            // Bắt đầu ngay hiệu ứng trái tim rơi liên tục xuyên suốt từ ngoài vào trong
             startFallingHearts();
         });
 
@@ -313,8 +353,14 @@
             }, 300);
         }
 
-        // Hiệu ứng mở thiệp
+        // Hiệu ứng mở thiệp và tự động phát nhạc nền từ Catbox
         function openInvitation() {
+            const audio = document.getElementById('bg-music');
+            audio.volume = 0.6;
+            audio.play().catch(error => {
+                console.log("Trình duyệt chặn autoplay âm thanh, yêu cầu tương tác thêm:", error);
+            });
+
             const envelope = document.getElementById('screen-envelope');
             const letter = document.getElementById('screen-letter');
 
